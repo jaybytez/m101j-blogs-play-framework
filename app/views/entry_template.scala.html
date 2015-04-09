@@ -1,0 +1,77 @@
+@(post: org.bson.Document, username: String = null, commentForm: Form[Comment])
+
+@import org.bson._
+@import helper._
+
+@implicitFieldConstructor = @{
+    FieldConstructor(twitterBootstrapInput.render)
+}
+
+@commentSize(document: Document) = @{
+    if(document.containsKey("comments")) {
+        document.get("comments").asInstanceOf[List[Document]].size;
+    } else {
+        0;
+    }
+}
+
+@main("Welcome to Play") {
+
+    @if(username != null) {
+        Welcome @username <a href="@routes.BlogController.logout()">
+            Logout</a> | <a href="@routes.BlogController.newpost()">New Post</a>
+
+        <p>
+        }
+
+    <a href="@routes.BlogController.posts()">Blog Home</a> <br> <br>
+
+    <h2>@post.get("title")</h2>
+    Posted @post.get("date") <i> By @post.get("author")</i> <br>
+    <hr>
+    @post.get("body")
+    <p>
+        <em>Filed Under</em>:
+        @if(post.containsKey("tags")) {
+            @defining(post.get("tags").asInstanceOf[List[String]]) { tags =>
+                @for(tag <- tags) {
+                    @tag
+                }
+            }
+        }
+    <p>
+        Comments:
+<ul>
+    @if(commentSize(post) > 0) {
+        @defining(post.get("comments").asInstanceOf[List[Document]]) { comments =>
+            @for(comment <- comments) {
+                Author: @comment.get("author") <br>
+                <br>
+                @comment.get("body") <br>
+                <hr>
+            }
+        }
+    }
+    <h3>Add a comment</h3>
+    @if(commentForm.hasErrors) {
+        <div class="alert alert-dismissable alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            @Messages("form.has.errors")
+        </div>
+    }
+    @if(commentForm.hasGlobalErrors) {
+        <div class="info-board info-board-red">
+            <span class="label label-important">@commentForm.globalError.message</span>
+        </div>
+    }
+    @form(routes.BlogController.newcomment()) {
+        <input type="hidden" id="permalink" name="permalink" value="@post.get("permalink")"/>
+        @inputText(commentForm("name"), 'class -> "form-control", '_label -> "Name (required)", '_help -> "", 'size -> "60")
+        @inputText(commentForm("email"), 'class -> "form-control", '_label -> "Email (optional)", '_help -> "", 'size -> "60")
+        @textarea(commentForm("body"), 'class -> "form-control", '_label -> "Comment", '_help -> "", 'cols -> "60", 'rows -> "10")
+        <br/>
+        <button type="submit" class="btn btn-green" id="saveComment">Save Comment</button>
+    }
+
+</ul>
+}

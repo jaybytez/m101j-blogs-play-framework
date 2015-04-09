@@ -1,0 +1,37 @@
+@(loginForm: Form[Login])
+
+@import helper._
+
+@implicitFieldConstructor = @{
+    FieldConstructor(twitterBootstrapInput.render)
+}
+<!DOCTYPE html>
+
+@main("Login") {
+    <style type="text/css">
+    .label { text-align : right }
+    .error { color : red }
+    </style>
+
+    Need to Create an account? <a href="@routes.BlogController.signup()">Signup</a> <p>
+    <h2>Login</h2>
+    @if(loginForm.hasErrors) {
+        <div class="alert alert-dismissable alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            @Messages("form.has.errors")
+        </div>
+    }
+    @if(loginForm.hasGlobalErrors) {
+        <div class="info-board info-board-red">
+            <span class="label label-important">@loginForm.globalError.message</span>
+        </div>
+    }
+    @form(routes.BlogController.loginSubmit()) {
+        @inputText(loginForm("username"), 'class -> "form-control", '_label -> "Username", '_help -> "")
+        @inputPassword(loginForm("password"), 'class -> "form-control", '_label -> "Password", '_help -> "", 'size -> "60")
+        <br/>
+        <button type="submit" class="btn btn-green" id="login">Login</button>
+        <a href="@routes.BlogController.posts()" class="btn btn-default" type="button">Cancel</a>
+    }
+
+}

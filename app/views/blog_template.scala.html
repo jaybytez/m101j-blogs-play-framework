@@ -1,0 +1,45 @@
+@(posts: List[org.bson.Document], username: String = null)
+
+@import org.bson._
+@import helper._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+
+@commentSize(document: Document) = @{
+    if(document.containsKey("comments")) {
+        document.get("comments").asInstanceOf[List[Document]].size;
+    } else {
+        0;
+    }
+}
+
+@main("Blogs") {
+
+@if(username != null) {
+    Welcome @username <a href="@routes.BlogController.logout()">Logout</a> | <a href="@routes.BlogController.newpost()">New Post</a>
+} else {
+    Need to <a href="@routes.BlogController.login()">Login</a>
+}
+
+<h1>My Blog</h1>
+
+@for(post <- posts) {
+ <h2><a href="@routes.BlogController.post(post.get("permalink").asInstanceOf[String])">@post.get("title")</a></h2>
+    Posted @post.get("date") <i>By @post.get("author")</i><br>
+    Comments: <a href="@routes.BlogController.post(post.get("permalink").asInstanceOf[String])">@commentSize(post)</a> <br/>
+    @post.get("body")
+    <p>
+
+    <p>
+        <em>Filed Under</em>:
+        @if(post.containsKey("tags")) {
+            @defining(post.get("tags").asInstanceOf[List[String]]) { tags =>
+                @for(tag <- tags) {
+                    @tag
+                }
+            }
+        }
+    <p>
+<hr>
+}
+}

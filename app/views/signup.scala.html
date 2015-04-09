@@ -1,0 +1,35 @@
+@(signupForm: Form[Signup])
+
+@import helper._
+
+@implicitFieldConstructor = @{
+    FieldConstructor(twitterBootstrapInput.render)
+}
+
+@main("Signup") {
+
+    Already a user? <a href="@routes.BlogController.login()">Login</a> <p>
+
+    <h2>Signup</h2>
+    @if(signupForm.hasErrors) {
+        <div class="alert alert-dismissable alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            @Messages("form.has.errors")
+        </div>
+    }
+    @if(signupForm.hasGlobalErrors) {
+        <div class="info-board info-board-red">
+            <span class="label label-important">@signupForm.globalError.message</span>
+        </div>
+    }
+    @form(routes.BlogController.signupSubmit()) {
+        @inputText(signupForm("username"), 'class -> "form-control", '_label -> "Username", '_help -> "")
+        @inputPassword(signupForm("password"), 'class -> "form-control", '_label -> "Password", '_help -> "")
+        @inputPassword(signupForm("verify"), 'class -> "form-control", '_label -> " Verify Password", '_help -> "")
+        @inputText(signupForm("email"), 'class -> "form-control", '_label -> " Email (optional)", '_help -> "")
+        <br/>
+        <button type="submit" class="btn btn-green" id="signup">Signup</button>
+        <a href="@routes.BlogController.posts()" class="btn btn-default" type="button">Cancel</a>
+    }
+
+}

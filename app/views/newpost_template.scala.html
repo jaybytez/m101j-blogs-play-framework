@@ -1,0 +1,36 @@
+@(username: String = null, postForm: Form[Post])
+
+@import helper._
+
+@implicitFieldConstructor = @{
+    FieldConstructor(twitterBootstrapInput.render)
+}
+
+@main("Newpost") {
+    @if(username != null) {
+        Welcome @username <a href="@routes.BlogController.logout()">Logout</a> | <a href="/newpost">
+            New Post</a>
+
+        <p>
+        }
+
+    @if(postForm.hasErrors) {
+        <div class="alert alert-dismissable alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            @Messages("form.has.errors")
+        </div>
+    }
+    @if(postForm.hasGlobalErrors) {
+        <div class="info-board info-board-red">
+            <span class="label label-important">@postForm.globalError.message</span>
+        </div>
+    }
+    @form(routes.BlogController.newpostSubmit()) {
+        @inputText(postForm("subject"), 'class -> "form-control", '_label -> "Title", '_help -> "")
+        @textarea(postForm("body"), 'class -> "form-control", '_label -> "Blog Entry", '_help -> "", 'size -> "60")
+        @inputText(postForm("tags"), 'class -> "form-control", '_label -> "Tags", '_help -> "", 'size -> "60")
+        <br/>
+        <button type="submit" class="btn btn-green" id="savePost">Save Post</button>
+    }
+
+}

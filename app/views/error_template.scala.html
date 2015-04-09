@@ -1,0 +1,10 @@
+@(error: String = null)
+
+@import helper._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+
+@main("Errors") {
+Oops..<br>
+@error
+}

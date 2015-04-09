@@ -1,0 +1,21 @@
+@(username: String = null)
+
+@import helper._
+
+@implicitFieldConstructor = @{
+    FieldConstructor(twitterBootstrapInput.render)
+}
+
+@main("Welcome to Blogs") {
+    <style type="text/css">
+    .label { text-align : right }
+    .error { color : red }
+    </style>
+    Welcome @username
+    <p>
+<ul>
+    <li><a href="/">Goto Blog Home</a></li>
+    <li><a href="/logout">Logout</a></li>
+    <li><a href="/newpost">Create a New Post</a></li>
+</ul>
+}

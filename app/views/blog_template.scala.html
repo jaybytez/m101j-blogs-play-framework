@@ -27,7 +27,7 @@
  <h2><a href="@routes.BlogController.post(post.get("permalink").asInstanceOf[String])">@post.get("title")</a></h2>
     Posted @post.get("date") <i>By @post.get("author")</i><br>
     Comments: <a href="@routes.BlogController.post(post.get("permalink").asInstanceOf[String])">@commentSize(post)</a> <br/>
-    @post.get("body")
+    @Html(post.getString("body"))
     <p>
 
     <p>
@@ -35,7 +35,7 @@
         @if(post.containsKey("tags")) {
             @defining(post.get("tags").asInstanceOf[List[String]]) { tags =>
                 @for(tag <- tags) {
-                    @tag
+                    <a href="@routes.BlogController.tag(tag)">@tag </a>
                 }
             }
         }

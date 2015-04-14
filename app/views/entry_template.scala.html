@@ -29,13 +29,13 @@
     <h2>@post.get("title")</h2>
     Posted @post.get("date") <i> By @post.get("author")</i> <br>
     <hr>
-    @post.get("body")
+    @Html(post.getString("body"))
     <p>
         <em>Filed Under</em>:
         @if(post.containsKey("tags")) {
             @defining(post.get("tags").asInstanceOf[List[String]]) { tags =>
                 @for(tag <- tags) {
-                    @tag
+                    <a href="@routes.BlogController.tag(tag)">@tag </a>
                 }
             }
         }
@@ -45,7 +45,7 @@
     @if(commentSize(post) > 0) {
         @defining(post.get("comments").asInstanceOf[List[Document]]) { comments =>
             @for(comment <- comments) {
-                Author: @comment.get("author") <br>
+                <!-- Author: @comment.get("author") <br>  -->
                 <br>
                 @comment.get("body") <br>
                 <hr>

@@ -37,6 +37,15 @@ public class BlogPostDAO extends BaseDAO {
         });
         return posts;
     }
+    
+	public List<Document> findByTagDateDescending(final String tag) {
+		List<Document> posts = new ArrayList<>();
+		postsCollection.find(new BasicDBObject("tags", tag)).sort(new BasicDBObject("date", -1)).limit(10).iterator()
+				.forEachRemaining(doc -> {
+					posts.add(doc);
+				});
+		return posts;
+	}
 
 
     public String addPost(String title, String body, List tags, String username) {

@@ -194,6 +194,16 @@ public class BlogController extends Controller {
         response().setCookie("session", sessionID, 3600);
         return redirect(routes.BlogController.welcome());
     }
+    
+    
+    public static Result tag(String tag) {
+    	SessionDAO sessionDAO = new SessionDAO();
+        String username = sessionDAO.findUserNameBySessionId(getSessionCookie(request()));
+
+        BlogPostDAO blogPostDAO = new BlogPostDAO();
+        List<Document> posts = blogPostDAO.findByTagDateDescending(tag);
+        return ok(blog_template.render(posts, username));
+    }
 
     // tags the tags string and put it into an array
     private static ArrayList<String> extractTags(String tags) {

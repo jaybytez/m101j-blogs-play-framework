@@ -30,6 +30,8 @@ POST        /login                            controllers.BlogController.loginSu
 
 GET         /logout                           controllers.BlogController.logout
 
+GET			/tag/:tag						  controllers.BlogController.tag(tag: String)
+
 GET         /post_not_found                   controllers.BlogController.postNotFound
 
 GET         /internal_error                   controllers.BlogController.internalError
